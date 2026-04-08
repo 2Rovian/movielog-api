@@ -3,6 +3,7 @@ package com.movielog.movielog_api.services;
 import com.movielog.movielog_api.dtos.request.MovieRequestDTO;
 import com.movielog.movielog_api.dtos.response.MovieResponseDTO;
 import com.movielog.movielog_api.entities.MovieEntity;
+import com.movielog.movielog_api.exceptions.DuplicateMovieException;
 import com.movielog.movielog_api.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -19,6 +20,10 @@ public class MovieService {
     private final MovieRepository movieRepository;
 
     public MovieResponseDTO createMovie(MovieRequestDTO movieRequestDTO) {
+        if(movieRepository.existsByTitleContainingIgnoreCaseAndImdb(movieRequestDTO.title(), movieRequestDTO.imdb())) {
+            throw new DuplicateMovieException("Movie already exists.");
+        }
+
         MovieEntity movieEntity = new MovieEntity(movieRequestDTO.title(), movieRequestDTO.imdb());
         movieRepository.save(movieEntity);
         return new MovieResponseDTO(
