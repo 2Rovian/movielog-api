@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     ) {
         RestApiErrorDTO dto = new RestApiErrorDTO(
                 HttpStatus.NOT_FOUND.value(),
-                HttpStatus.NOT_MODIFIED.name(),
+                HttpStatus.NOT_FOUND.name(),
                 exception.getMessage(),
                 request.getRequestURI(),
                 LocalDateTime.now()

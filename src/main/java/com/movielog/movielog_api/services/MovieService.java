@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class MovieService {
     private final MovieRepository movieRepository;
 
     public MovieResponseDTO createMovie(MovieRequestDTO movieRequestDTO) {
-        if(movieRepository.existsByTitleContainingIgnoreCaseAndImdb(movieRequestDTO.title(), movieRequestDTO.imdb())) {
+        if(movieRepository.existsByTitleIgnoreCaseAndImdb(movieRequestDTO.title(), movieRequestDTO.imdb())) {
             throw new DuplicateMovieException("Movie already exists.");
         }
 
@@ -65,5 +64,29 @@ public class MovieService {
                 movieEntity.getImdb(),
                 movieEntity.getUpdatedAt(),
                 movieEntity.getCreatedAt());
+    }
+
+    public void deleteMovieById(Long id) {
+        if(!movieRepository.existsById(id)) {
+            throw new NotFoundMovieException("Movie not found.");
+        }
+        movieRepository.deleteById(id);
+    }
+
+    public MovieResponseDTO updateMovieWithPut(Long id, MovieRequestDTO movieRequestDTO) {
+        MovieEntity movieEntity = movieRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMovieException("Movie not found."));
+
+        movieEntity.setTitle(movieRequestDTO.title());
+        movieEntity.setImdb(movieRequestDTO.imdb());
+
+        MovieEntity attMovie = movieRepository.save(movieEntity);
+
+        return new MovieResponseDTO(
+                attMovie.getId(),
+                attMovie.getTitle(),
+                attMovie.getImdb(),
+                attMovie.getUpdatedAt(),
+                attMovie.getCreatedAt());
     }
 }
