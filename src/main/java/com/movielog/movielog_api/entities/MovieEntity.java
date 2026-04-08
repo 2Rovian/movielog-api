@@ -12,6 +12,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +35,7 @@ public class MovieEntity {
     @DecimalMin(value = "0.0", message = "A nota mínima é 0.0")
     @DecimalMax(value = "10.0", message = "A nota máxima é 10.0")
     @Digits(integer = 2, fraction = 1)
-    private Double imdb;
+    private BigDecimal imdb;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -44,7 +45,7 @@ public class MovieEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public MovieEntity(String title, Double imdb) {
+    public MovieEntity(String title, BigDecimal imdb) {
         this.title = title;
         this.imdb = imdb;
     }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -28,7 +29,7 @@ public class MovieService {
                 movieEntity.getCreatedAt());
     }
 
-    public List<MovieResponseDTO> searchMovie(String title, Double imdb) {
+    public List<MovieResponseDTO> searchMovie(String title, BigDecimal imdb) {
         MovieEntity movieEntity = new MovieEntity();
         movieEntity.setTitle(title);
         movieEntity.setImdb(imdb);
