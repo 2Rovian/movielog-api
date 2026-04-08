@@ -4,6 +4,7 @@ import com.movielog.movielog_api.dtos.request.MovieRequestDTO;
 import com.movielog.movielog_api.dtos.response.MovieResponseDTO;
 import com.movielog.movielog_api.entities.MovieEntity;
 import com.movielog.movielog_api.exceptions.DuplicateMovieException;
+import com.movielog.movielog_api.exceptions.NotFoundMovieException;
 import com.movielog.movielog_api.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +54,16 @@ public class MovieService {
                         movie.getImdb(),
                         movie.getUpdatedAt(),
                         movie.getCreatedAt())).toList();
+    }
+
+    public MovieResponseDTO searchMovieById(Long id) {
+        MovieEntity movieEntity = movieRepository.findById(id)
+                .orElseThrow(() -> new NotFoundMovieException("Movie not found."));
+        return new MovieResponseDTO(
+                movieEntity.getId(),
+                movieEntity.getTitle(),
+                movieEntity.getImdb(),
+                movieEntity.getUpdatedAt(),
+                movieEntity.getCreatedAt());
     }
 }

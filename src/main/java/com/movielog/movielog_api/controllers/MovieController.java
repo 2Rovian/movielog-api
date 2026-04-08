@@ -25,6 +25,11 @@ public class MovieController {
         return ResponseEntity.ok(movieService.searchMovie(title, imdb));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieResponseDTO> getMovieById(@PathVariable Long id) {
+        return ResponseEntity.ok(movieService.searchMovieById(id));
+    }
+
     @PostMapping
     public ResponseEntity<MovieResponseDTO> postMovie(@RequestBody MovieRequestDTO movieRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(movieService.createMovie(movieRequestDTO));
